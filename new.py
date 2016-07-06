@@ -21,6 +21,7 @@ def V(x):
 
 def nonlinearStep( data_init,x, V_array, dt):
     data1=data_init+V_array*data_init*dt/(1.j*hbar)
+    
     return data1
 def fourierStep(data_init,x,dt):
     data1=fft(data_init)
