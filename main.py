@@ -5,8 +5,9 @@ from pylab import *
 from matplotlib import animation
 
 N=200
-dt=0.01
-dx=0.001
+dt=0.00005
+dx=0.01
+speed = 80
 x=arange(-8,8,dx)
 hbar=1.
 m=1.
@@ -15,18 +16,21 @@ DATA = []
 
 def init():
     line.set_data([], [])
-    return line,
+    time_text.set_text('')
+    energy_text.set_text('')
+    return line, time_text, energy_text
 
 def animate(i):
     y = DATA[i]
     line.set_data(x, y)
-    return line,
+    time_text.set_text(str(i))
+    energy_text.set_text(str(i))
+    return line, time_text, energy_text
 
 def V(x):
-    if x**2 > 100.:
-        return 100
-    else:
-        return x**2
+        return 0
+    #elif x < 0:
+        #return 0
 
 
 def nonlinearStep( data_init,x, V_array, dt):
@@ -41,9 +45,11 @@ def fourierStep(data_init,x,dt):
     h1 = fftshift(h)
     data3 = -4*pi**2*h**2*data1*dt*1.j*hbar/(2.*m) +data1
     
-    data4 = ifftshift(data3)
-    data5 = ifft(data1)
+    data4 = fftshift(data3)
+    data5 = fft(data3)
     return data5
+
+
     
 
 if __name__ == "__main__":
@@ -61,12 +67,15 @@ if __name__ == "__main__":
         f_l = b
             
         f_ini = b
-        DATA.append(f_ini)
+        DATA.append(abs(f_ini)**2)
             
-    print "\n\n" + "program done in " + str(time.time() -runtime) + "\n\n"
     fig = figure()
-    ax = axes(xlim=(-8, 8), ylim=(-1, 2))
+    ax = axes(xlim=(-8, 8), ylim=(-1, 10))
     line, = plot([], [], lw=2)
+    time_text = ax.text(0.02, 0.95, '', transform=ax.transAxes)
+    energy_text = ax.text(0.02, 0.90, '', transform=ax.transAxes)
 
-    anim = animation.FuncAnimation(fig, animate, init_func=init, frames=200, interval=20, blit=True)
+    anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N, interval=speed, blit=True)
+    plot(x, V_array)
+    print "\n\n" + "program done in " + str(time.time() -runtime) + "\n\n"
     show()
