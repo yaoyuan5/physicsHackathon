@@ -1,9 +1,12 @@
 import sys
 import time
+
+import sys
+import time
 from numpy import *
 from pylab import *
-N=80
-dt=0.001
+N=200
+dt=0.01
 dx=0.001
 x=arange(-10,10,dx)
 hbar=1.
@@ -24,38 +27,27 @@ def fourierStep(data_init,x,dt):
     data2=fftshift(data1)
     h=fftfreq(len(x), (x[3]-x[2]))
     h1=fftshift(h)
-    data3= -4*pi**2*h1**2*data2*dt*1.j*hbar/(2.*m) +data2
+    data3= -4*pi**2*h**2*data1*dt*1.j*hbar/(2.*m) +data1
     
     data4=ifftshift(data3)
-    data5=ifft(data4)
+    data5=ifft(data1)
     return data5
     
 
+DATA=[]
 
-if __name__ == "__main__":
-    DATA=[]
+V_array=[]
+for j in arange(0,len(x)):
+    V_array.append(V(x[j]))
+V_array=array(V_array)
     
-    
-    runtime = time.time()
-    V_array=[]
-    for j in arange(0,len(x)):
-        V_array.append(V(x[j]))
-    V_array=array(V_array)
-    
-    f_ini=exp(-x**2)
-    for k in range(N):
-        a=nonlinearStep(f_ini,x,V_array,dt)
-        f_nl=a
-        b=fourierStep(a,x,dt)
-        f_l=b
+f_ini=exp(-x**2)
+for k in range(N):
+    a=nonlinearStep(f_ini,x,V_array,dt)
+    f_nl=a
+    b=fourierStep(a,x,dt)
+    f_l=b
         
-        f_ini=b
-        DATA.append(f_ini)
+    f_ini=b
+    DATA.append(f_ini)
         
-        
-
-    
-    
-
-
-    print "program done in " + str(time.time() -runtime)
