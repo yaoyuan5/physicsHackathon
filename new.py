@@ -1,22 +1,20 @@
 import sys
 import time
-
-import sys
-import time
 from numpy import *
 from pylab import *
+
 N=200
 dt=0.01
 dx=0.001
 x=arange(-10,10,dx)
 hbar=1.
 m=1.
+
 def V(x):
-    if abs(x)>100.:
+    if x**2 > 100.:
         return 0
     else:
         return x**2
-
 
 
 def nonlinearStep( data_init,x, V_array, dt):
@@ -35,20 +33,24 @@ def fourierStep(data_init,x,dt):
     return data5
     
 
-DATA=[]
+if __name__ == "__main__":
+    runtime = time.time()
 
-V_array=[]
-for j in arange(0,len(x)):
-    V_array.append(V(x[j]))
-V_array=array(V_array)
-    
-f_ini=exp(-x**2)
-for k in range(N):
-    a=nonlinearStep(f_ini,x,V_array,dt)
-    f_nl=a
-    b=fourierStep(a,x,dt)
-    f_l=b
-        
-    f_ini=b
-    DATA.append(f_ini)
-        
+    DATA = []
+    V_array = map(V,x)
+
+
+    f_ini = exp(-x**2)
+
+    for k in range(N):
+        a = nonlinearStep(f_ini,x,V_array,dt)
+        f_nl = a
+        b = fourierStep(a,x,dt)
+        f_l = b
+            
+        f_ini = b
+        DATA.append(f_ini)
+            
+    print "\n\n" + "program done in " + str(time.time() -runtime) + "\n\n"
+    plot(x,DATA[80])
+    show()
