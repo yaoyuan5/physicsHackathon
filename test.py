@@ -2,8 +2,6 @@ from numpy import *
 from pylab import *
 import time
 
-# stupid comment
-
 
 N=80
 dt=0.01
