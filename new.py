@@ -12,24 +12,24 @@ m=1.
 
 def V(x):
     if x**2 > 100.:
-        return 0
+        return 100
     else:
         return x**2
 
 
 def nonlinearStep( data_init,x, V_array, dt):
-    data1=data_init+V_array*data_init*dt/(1.j*hbar)
+    data1 = data_init+V_array*data_init*dt/(1.j*hbar)
     
     return data1
 def fourierStep(data_init,x,dt):
-    data1=fft(data_init)
-    data2=fftshift(data1)
-    h=fftfreq(len(x), (x[3]-x[2]))
-    h1=fftshift(h)
-    data3= -4*pi**2*h**2*data1*dt*1.j*hbar/(2.*m) +data1
+    data1 = fft(data_init)
+    data2 = fftshift(data1)
+    h = fftfreq(len(x), (x[3]-x[2]))
+    h1 = fftshift(h)
+    data3 = -4*pi**2*h**2*data1*dt*1.j*hbar/(2.*m) +data1
     
-    data4=ifftshift(data3)
-    data5=ifft(data1)
+    data4 = ifftshift(data3)
+    data5 = ifft(data1)
     return data5
     
 
@@ -52,5 +52,5 @@ if __name__ == "__main__":
         DATA.append(f_ini)
             
     print "\n\n" + "program done in " + str(time.time() -runtime) + "\n\n"
-    plot(x,DATA[80])
+    plot(x,DATA[180])
     show()
