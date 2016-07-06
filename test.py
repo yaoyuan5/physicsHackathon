@@ -1,5 +1,7 @@
 from numpy import *
 from pylab import *
+import time
+
 N=80
 dt=0.01
 x=arange(-100,100,0.1)
