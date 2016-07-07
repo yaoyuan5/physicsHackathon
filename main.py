@@ -1,10 +1,11 @@
+
 import sys
 import time
 from numpy import *
 from pylab import *
 from matplotlib import animation
 
-N=200
+N=50
 dt=0.00005
 dx=0.01
 speed = 80
@@ -40,12 +41,11 @@ def nonlinearStep( data_init,x, V_array, dt):
 
 def fourierStep(data_init,x,dt):
     data1 = fft(data_init)
-    data2 = fftshift(data1)
-    h = fftfreq(len(x), (x[3]-x[2]))
-    h1 = fftshift(h)
-    data3 = -4*pi**2*h**2*data1*dt*1.j*hbar/(2.*m) +data1
     
-    data4 = fftshift(data3)
+    h = fftfreq(len(x), (x[3]-x[2]))
+    
+    data3 = data1*exp(-1j*hbar*h**2*4*pi**2*dt/(2.*m))
+    
     data5 = fft(data3)
     return data5
 
@@ -78,4 +78,4 @@ if __name__ == "__main__":
     anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N, interval=speed, blit=True)
     plot(x, V_array)
     print "\n\n" + "program done in " + str(time.time() -runtime) + "\n\n"
-    show()
+show()
